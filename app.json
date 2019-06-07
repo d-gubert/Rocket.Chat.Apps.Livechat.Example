@@ -1,0 +1,15 @@
+{
+    "id": "4b9da8df-5ce6-478c-892b-3318f0a366be",
+    "version": "0.0.1",
+    "requiredApiVersion": "^1.4.0",
+    "iconFile": "icon.png",
+    "author": {
+        "name": "Douglas Gubert",
+        "homepage": "http://github.com/d-gubert",
+        "support": "p"
+    },
+    "name": "LivechatExample",
+    "nameSlug": "livechatexample",
+    "classFile": "LivechatExampleApp.ts",
+    "description": "Livechat example"
+}
