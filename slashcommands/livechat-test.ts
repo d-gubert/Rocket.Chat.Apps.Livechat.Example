@@ -23,6 +23,14 @@ export class LivechatTest implements ISlashCommand {
             case 'register':
                 await this.registerVisitor(context, read, modify);
                 break;
+
+            case 'transfer':
+                await this.transferVisitor(context, read, modify);
+                break;
+
+            case 'close':
+                await this.closeRoom(context, read, modify);
+                break;
         }
     }
 
@@ -70,5 +78,48 @@ export class LivechatTest implements ISlashCommand {
             .setText('Alo');
 
         modify.getCreator().finish(livechat);
+    }
+
+    private async transferVisitor(context: SlashCommandContext, read: IRead, modify: IModify) {
+        const [visitor] = await read.getLivechatReader().getLivechatVisitors({token:'xqf3vor80ag1jquf9qzge3'});
+        const [currentRoom] = await read.getLivechatReader().getLivechatRooms(visitor);
+
+        const result = await modify.getUpdater().getLivechatUpdater().transferVisitor(visitor, {
+            currentRoom,
+            targetAgent: await read.getUserReader().getByUsername('dglivechat'),
+        });
+
+        const msg = modify.getCreator().startMessage({
+            room: context.getRoom(),
+            sender: await read.getUserReader().getByUsername('rocket.cat'),
+        });
+
+        if (result) {
+            msg.setText('Transfer successfull');
+        } else {
+            msg.setText('Transfer not successfull');
+        }
+
+        modify.getNotifier().notifyUser(context.getSender(), msg.getMessage());
+    }
+
+    private async closeRoom(context: SlashCommandContext, read: IRead, modify: IModify) {
+        const [visitor] = await read.getLivechatReader().getLivechatVisitors({username:'guest-95'});
+        const [currentRoom] = await read.getLivechatReader().getLivechatRooms(visitor);
+
+        const result = await modify.getUpdater().getLivechatUpdater().closeRoom(currentRoom, 'Slashcommand closed');
+
+        const msg = modify.getCreator().startMessage({
+            room: context.getRoom(),
+            sender: await read.getUserReader().getByUsername('rocket.cat'),
+        });
+
+        if (result) {
+            msg.setText('Close successfull');
+        } else {
+            msg.setText('Close not successfull');
+        }
+
+        modify.getNotifier().notifyUser(context.getSender(), msg.getMessage());
     }
 }
