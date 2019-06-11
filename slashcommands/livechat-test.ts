@@ -30,6 +30,10 @@ export class LivechatTest implements ISlashCommand {
             case 'close':
                 await this.closeRoom(context, read, modify);
                 break;
+
+            case 'upload':
+                await this.readUpload(context, read, modify);
+                break;
         }
     }
 
@@ -120,5 +124,17 @@ export class LivechatTest implements ISlashCommand {
         }
 
         modify.getNotifier().notifyUser(context.getSender(), msg.getMessage());
+    }
+
+    private async readUpload(context: SlashCommandContext, read: IRead, modify: IModify) {
+        const message = await read.getMessageReader().getById('GHtCfYkoEeSbjRA77');
+
+        if (!message || !message.file) {
+            return;
+        }
+
+        const buffer = await read.getUploadReader().getBufferById(message.file._id);
+
+        console.log({buffer, base64: buffer.toString('base64')});
     }
 }
