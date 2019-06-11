@@ -1,8 +1,7 @@
 import { IHttp, IModify, IPersistence, IRead } from '@rocket.chat/apps-engine/definition/accessors';
-import { IRoom } from '@rocket.chat/apps-engine/definition/rooms';
+import { IVisitor } from '@rocket.chat/apps-engine/definition/livechat';
 import { ISlashCommand, SlashCommandContext } from '@rocket.chat/apps-engine/definition/slashcommands';
 import { LivechatExampleApp } from '../LivechatExampleApp';
-import { IVisitor } from '@rocket.chat/apps-engine/definition/livechat';
 
 export class LivechatTest implements ISlashCommand {
     public command = 'livechat-test';
@@ -81,7 +80,7 @@ export class LivechatTest implements ISlashCommand {
     }
 
     private async transferVisitor(context: SlashCommandContext, read: IRead, modify: IModify) {
-        const [visitor] = await read.getLivechatReader().getLivechatVisitors({token:'xqf3vor80ag1jquf9qzge3'});
+        const [visitor] = await read.getLivechatReader().getLivechatVisitors({token: 'xqf3vor80ag1jquf9qzge3'});
         const [currentRoom] = await read.getLivechatReader().getLivechatRooms(visitor);
 
         const result = await modify.getUpdater().getLivechatUpdater().transferVisitor(visitor, {
@@ -104,7 +103,7 @@ export class LivechatTest implements ISlashCommand {
     }
 
     private async closeRoom(context: SlashCommandContext, read: IRead, modify: IModify) {
-        const [visitor] = await read.getLivechatReader().getLivechatVisitors({username:'guest-95'});
+        const [visitor] = await read.getLivechatReader().getLivechatVisitors({username: 'guest-95'});
         const [currentRoom] = await read.getLivechatReader().getLivechatRooms(visitor);
 
         const result = await modify.getUpdater().getLivechatUpdater().closeRoom(currentRoom, 'Slashcommand closed');
